@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import { Todo, User } from '../../types';
-
-import { getUserById } from '../../use_cases/getUserById';
+import { User } from '../../types';
 
 type Props = {
   possibleUsers: User[];
-  nextId: number;
-  onAdd: (todo: Todo) => void;
+  onAdd: (title: string, userId: number) => void;
 };
 
-export const TodoForm: React.FC<Props> = ({ possibleUsers, nextId, onAdd }) => {
+export const TodoForm: React.FC<Props> = ({ possibleUsers, onAdd }) => {
   const [title, setTitle] = useState('');
   const [userId, setUserId] = useState(0);
   const [isTitleValid, setIsTitleValid] = useState(true);
@@ -17,27 +14,22 @@ export const TodoForm: React.FC<Props> = ({ possibleUsers, nextId, onAdd }) => {
 
   const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsTitleValid(title.trim().length > 0);
-    setisUserSelected(userId !== 0);
+    const isValidTitle = title.trim().length > 0;
+    const isValidUser = userId !== 0;
 
-    if (!(title.trim().length > 0) || !(userId !== 0)) {
+    setIsTitleValid(isValidTitle);
+    setisUserSelected(isValidUser);
+
+    if (!isValidTitle || !isValidUser) {
       return;
     }
-
-    const todo: Todo = {
-      id: nextId,
-      title,
-      completed: false,
-      userId,
-      user: getUserById(possibleUsers, userId),
-    };
 
     setTitle('');
     setUserId(0);
     setIsTitleValid(true);
     setisUserSelected(true);
 
-    onAdd(todo);
+    onAdd(title, userId);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

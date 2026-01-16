@@ -18,16 +18,22 @@ export const App = () => {
   const [visibleTodos, setVisibleTodos] = useState(todos);
   const currentMaxId: number = getMaxTodoId(visibleTodos);
 
+  const handleAddNewUser = (title: string, userId: number) => {
+    const todo: Todo = {
+      id: currentMaxId + 1,
+      title,
+      completed: false,
+      userId,
+      user: getUserById(usersFromServer, userId),
+    };
+
+    setVisibleTodos(prev => [...prev, todo]);
+  };
+
   return (
     <div className="App">
       <h1 className="App__title">Add todo form</h1>
-      <TodoForm
-        possibleUsers={usersFromServer}
-        nextId={currentMaxId + 1}
-        onAdd={(todo: Todo) => {
-          setVisibleTodos(prev => [...prev, todo]);
-        }}
-      />
+      <TodoForm possibleUsers={usersFromServer} onAdd={handleAddNewUser} />
       <TodoList todos={visibleTodos} />
     </div>
   );
