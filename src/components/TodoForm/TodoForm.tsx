@@ -24,12 +24,12 @@ export const TodoForm: React.FC<Props> = ({ possibleUsers, onAdd }) => {
       return;
     }
 
+    onAdd(title, userId);
+
     setTitle('');
     setUserId(0);
     setIsTitleValid(true);
     setisUserSelected(true);
-
-    onAdd(title, userId);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
