@@ -16,18 +16,19 @@ export const todos: Todo[] = todosFromServer.map(todo => ({
 
 export const App = () => {
   const [visibleTodos, setVisibleTodos] = useState(todos);
-  const currentMaxId: number = getMaxTodoId(visibleTodos);
 
   const handleAddNewUser = (title: string, userId: number) => {
-    const todo: Todo = {
-      id: currentMaxId + 1,
-      title,
-      completed: false,
-      userId,
-      user: getUserById(usersFromServer, userId),
-    };
+    setVisibleTodos(prev => {
+      const todo: Todo = {
+        id: getMaxTodoId(visibleTodos) + 1,
+        title,
+        completed: false,
+        userId,
+        user: getUserById(usersFromServer, userId),
+      };
 
-    setVisibleTodos(prev => [...prev, todo]);
+      return [...prev, todo];
+    });
   };
 
   return (
